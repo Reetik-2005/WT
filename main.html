@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickRent - Choose Your Vehicle</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b7dda;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin-left: auto;
+            margin-right: 2rem;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #0b7dda;
+        }
+        
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .profile-btn {
+            background-color: transparent;
+            border: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .profile-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .dropdown-content a {
+            color: #555;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f5f5f5;
+            color:  #0b7dda;
+        }
+        
+        .profile-dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color:  #0b7dda;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        
+        .vehicle-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+            
+        }
+        
+        .category-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+        }
+        
+        .category-img {
+            height: 180px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            font-size: 3rem;
+            color: #764ba2;
+        }
+        
+        .category-info {
+            padding: 1.5rem;
+        }
+        
+        .category-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+        
+        .category-desc {
+            color: #666;
+            margin: 0 0 1rem 0;
+            line-height: 1.6;
+        }
+        
+        .vehicles-available {
+            color: #5e4ba2;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        button {
+            background-color: white;
+            border: 1px solid #4b51a2;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background-color: #764ba2;
+        }
+        
+        button:hover .vehicles-available {
+            color: white;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 3rem 2rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #444;
+            color: #ccc;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .vehicle-categories {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <span class="logo-icon"></span>
+                <span>QuickRent</span>
+            </a>
+            <div class="nav-links">
+                <a href="becomeahost.html" class="nav-link">Become a host</a>
+                <a href="conatct.html" class="nav-link">Contact</a>
+            </div>
+            <div class="profile-dropdown">
+                <button class="profile-btn">Profile</button>
+                <div class="dropdown-content">
+                    <a href="login.html">Sign Out</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Choose Your Perfect Ride</h1>
+            <p class="subtitle">From cycles to buses, we have everything you need for your journey. Select a vehicle category below to explore options.</p>
+        </section>
+        
+        <section class="vehicle-categories">
+            
+            <div class="category-card">
+                <div class="category-img">🚲</div>
+                <div class="category-info">
+                    <h2 class="category-title">Bicycles</h2>
+                    <p class="category-desc">Eco-friendly cycles for short distances and leisure rides around the city.</p>
+                    <a href="cycle.html"> <button><p class="vehicles-available">Rent</p></button></a>
+                </div>
+            </div>
+        
+            
+            <div class="category-card">
+                <div class="category-img">🛵</div>
+                <div class="category-info">
+                    <h2 class="category-title">Bikes & Scooters</h2>
+                    <p class="category-desc">Quick and efficient two-wheelers for beating the traffic and easy parking.</p>
+                    <a href="bike.html"> <button><p class="vehicles-available">Rent</p></button></a>
+                </div>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-img">🚗</div>
+                <div class="category-info">
+                    <h2 class="category-title">Cars</h2>
+                    <p class="category-desc">Comfortable and convenient cars for your daily commute or weekend getaways.</p>
+                    <a href="dividecar.html"> <button><p class="vehicles-available">Rent</p></button></a>
+                </div>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-img">🚌</div>
+                <div class="category-info">
+                    <h2 class="category-title">Buses & Travellers</h2>
+                    <p class="category-desc">Spacious options for group travel, events, and longer journeys with friends and family.</p>
+                    <a href="bus.html"> <button><p class="vehicles-available">Rent</p></button></a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About QuickRent</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Safety</a></li>
+                    <li><a href="#">Cancellation Policy</a></li>
+                    <li><a href="#">Report an Issue</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">Insurance</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>© 2025 QuickRent. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

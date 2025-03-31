@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Protocol</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4CAF50;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 32px;
+        }
+        
+        .subheading {
+            color: #666;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            padding: 0 10px;
+            flex: 1 0 calc(50% - 20px);
+        }
+        
+        .form-group.full-width {
+            flex: 1 0 calc(100% - 20px);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            outline: none;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .date-group {
+            position: relative;
+        }
+        
+        .date-group::after {
+            content: "📅";
+            position: absolute;
+            right: 25px;
+            top: 42px;
+            pointer-events: none;
+        }
+        
+        .location-icon::before {
+            content: "📍";
+            margin-right: 5px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            .form-group {
+                flex: 1 0 calc(100% - 20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quick Rent</h1>
+            <p class="subheading">Book your vehicle rental with ease</p>
+        </div>
+        
+        <form id="rentForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group date-group">
+                    <label for="fromDate">From Date</label>
+                    <input type="date" id="fromDate" name="fromDate" required>
+                </div>
+
+                <div class="form-group date-group">
+                    <label for="toDate">To Date</label>
+                    <input type="date" id="toDate" name="toDate" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="state" class="location-icon">State</label>
+                    <select id="state" name="state" onchange="updateDistricts()" required>
+                        <option value="">Select a State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="district" class="location-icon">District</label>
+                    <input type="text" id="district" name="district" placeholder="Enter district" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="area" class="location-icon">Area</label>
+                    <input type="text" id="area" name="Area" placeholder="Area" required>
+                </div>
+            </div>
+
+            <button type="submit">Book Now</button>
+        </form>
+        
+        <div class="footer">
+            <p>© 2025 Rent Protocol. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        // Sample state-district mapping (limited examples for brevity)
+        const districtsByState = {
+            "Andhra Pradesh": ["Visakhapatnam", "Guntur", "Krishna"],
+            "Karnataka": ["Bangalore", "Mysore", "Mangalore"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
+            // Add more states and districts as needed
+        };
+
+        function updateDistricts() {
+            const state = document.getElementById("state").value;
+            const districtInput = document.getElementById("district");
+            districtInput.value = ""; // Reset district input
+
+            if (districtsByState[state]) {
+                // For simplicity, this just clears the field; you could enhance it with a dropdown
+                districtInput.placeholder = `e.g., ${districtsByState[state][0]}`;
+            } else {
+                districtInput.placeholder = "Enter district";
+            }
+        }
+
+        // Form submission handler
+        document.getElementById("rentForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            alert("Booking submitted!\n" + 
+                  "Name: " + document.getElementById("firstName").value + " " + 
+                  document.getElementById("lastName").value + "\n" +
+                  "From: " + document.getElementById("fromDate").value + "\n" +
+                  "To: " + document.getElementById("toDate").value + "\n" +
+                  "State: " + document.getElementById("state").value + "\n" +
+                  "District: " + document.getElementById("district").value + "\n" +
+                  "Area: " + document.getElementById("area").value);
+            
+            // Redirect to booked.html after alert
+            window.location.href = "booked.html";
+        });
+        
+        // Set default dates
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        const formatDate = (date) => {
+            return date.toISOString().split('T')[0];
+        };
+        
+        document.getElementById("fromDate").value = formatDate(today);
+        document.getElementById("toDate").value = formatDate(tomorrow);
+    </script>
+</body>
+</html>

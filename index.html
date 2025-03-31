@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RentWheels - Vehicle Rental</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        #navbar {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 10px;
+            display: flex; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        /* Hamburger Menu */
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            margin-right: 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 0;
+            height: 100%;
+            position: fixed;
+            background-color: #2c3e50;
+            padding-top: 60px;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            transition: width 0.3s ease-in-out;
+            z-index: 999;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .sidebar a:hover {
+            background-color: #34495e;
+            border-radius: 6px;
+        }
+
+        .sidebar.active {
+            width: 250px;
+        }
+
+        .sidebar.active a {
+            opacity: 1;
+        }
+
+        .sidebar .profile {
+            padding: 30px 25px;
+            background-color: #1a252f;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .sidebar.active .profile {
+            opacity: 1;
+        }
+
+        .sidebar .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .sidebar .profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar .profile-info span:first-child {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .sidebar .profile-info span:last-child {
+            font-size: 12px;
+            color: #bdc3c7;
+        }
+
+        /* Main Content */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            transition: margin-left 0.3s ease-in-out;
+            margin-left: 0;
+            padding: 20px;
+            padding-top: 60px; /* Added to account for fixed navbar */
+        }
+
+        .main-container.expanded {
+            margin-left: 250px;
+        }
+
+        /* Vehicle Grid */
+        .vehicle-container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 0;
+            scrollbar-width: none;
+        }
+
+        .vehicle-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .vehicle-card {
+            min-width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .vehicle-image {
+            height: 60%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .bicycle { background-image: url('https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); }
+        .bike { background-image: url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); }
+        .car { background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); }
+        .bus { background-image: url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); }
+
+        .vehicle-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .vehicle-info h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-size: 22px;
+        }
+
+        .vehicle-info p {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .rent-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .rent-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Navigation Controls */
+        .nav-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #bdc3c7;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .nav-dot.active {
+            background-color: #3498db;
+        }
+
+        /* Footer */
+        .bottom-nav {
+            background-color: #2c3e50;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .bottom-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        .social-icons a {
+            font-size: 24px;
+            color: white;
+            margin-right: 10px;
+        }
+
+        /* Social Media Colors */
+        .sc1:hover { color: #30aae7; }  /* X */
+        .sc2:hover { color: #f0138c; }  /* Instagram */
+        .sc3:hover { color: #29ba35; }  /* WhatsApp */
+        .sc4:hover { color: #3b5998; }  /* Facebook */
+
+        @media screen and (min-width: 769px) {
+            .sidebar {
+                width: 250px;
+                opacity: 1;
+            }
+            .sidebar a, .sidebar .profile {
+                opacity: 1;
+            }
+            .main-container {
+                margin-left: 250px;
+            }
+            .menu-icon {
+                display: none;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .vehicle-card {
+                min-width: 250px;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div id="navbar">
+        <span class="menu-icon" onclick="toggleSidebar()">☰</span>
+        <div class="logo">RentWheels</div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="profile">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile">
+            <div class="profile-info">
+                <span>John Smith</span>
+                <span>Premium Member</span>
+            </div>
+        </div>
+        <a href="#"><i class="fas fa-home"></i> Home</a>
+        <a href="#"><i class="fas fa-bicycle"></i> Bicycles</a>
+        <a href="#"><i class="fas fa-motorcycle"></i> Bikes/Scooters</a>
+        <a href="#"><i class="fas fa-car"></i> Cars</a>
+        <a href="#"><i class="fas fa-bus"></i> Buses/Travelers</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container" id="main-content">
+        <h1 style="margin-bottom: 20px;">Choose Your Vehicle</h1>
+
+        <div class="vehicle-container" id="vehicleContainer">
+            <!-- Bicycle Card -->
+            <div class="vehicle-card">
+                <div class="vehicle-image bicycle"></div>
+                <div class="vehicle-info">
+                    <h3>Bicycles</h3>
+                    <p>Eco-friendly rides for short distances around the city.</p>
+                    <div class="price">Starting from $5/hour</div>
+                    <button class="rent-btn">Rent Now</button>
+                </div>
+            </div>
+
+            <!-- Bike/Scooter Card -->
+            <div class="vehicle-card">
+                <div class="vehicle-image bike"></div>
+                <div class="vehicle-info">
+                    <h3>Bikes/Scooters</h3>
+                    <p>Quick and convenient two-wheelers for city traffic.</p>
+                    <div class="price">Starting from $10/hour</div>
+                    <button class="rent-btn">Rent Now</button>
+                </div>
+            </div>
+
+            <!-- Car Card -->
+            <div class="vehicle-card">
+                <div class="vehicle-image car"></div>
+                <div class="vehicle-info">
+                    <h3>Cars</h3>
+                    <p>Comfortable four-wheelers for your journeys.</p>
+                    <div class="price">Starting from $20/hour</div>
+                    <button class="rent-btn">Rent Now</button>
+                </div>
+            </div>
+
+            <!-- Bus/Traveler Card -->
+            <div class="vehicle-card">
+                <div class="vehicle-image bus"></div>
+                <div class="vehicle-info">
+                    <h3>Buses/Travelers</h3>
+                    <p>Spacious vehicles for group travel.</p>
+                    <div class="price">Starting from $50/hour</div>
+                    <button class="rent-btn">Rent Now</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-controls">
+            <div class="nav-dot active" data-index="0"></div>
+            <div class="nav-dot" data-index="1"></div>
+            <div class="nav-dot" data-index="2"></div>
+            <div class="nav-dot" data-index="3"></div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="#" class="ah1">About Us</a>
+            <a href="#" class="ah2">Privacy Policy</a>
+            <a href="#" class="ah3">Terms & Conditions</a>
+            <div class="social-icons">
+                <a href="#" class="sc1"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" class="sc2"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="sc3"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" class="sc4"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            var content = document.getElementById("main-content");
+
+            sidebar.classList.toggle("active");
+            content.classList.toggle("expanded");
+        }
+
+        // Navigation dots functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const dots = document.querySelectorAll('.nav-dot');
+            const vehicleContainer = document.getElementById('vehicleContainer');
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    dots.forEach(d => d.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const index = parseInt(this.getAttribute('data-index'));
+                    const cardWidth = document.querySelector('.vehicle-card').offsetWidth;
+                    const gap = 20;
+                    vehicleContainer.scrollTo({
+                        left: index * (cardWidth + gap),
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            vehicleContainer.addEventListener('scroll', function() {
+                const cardWidth = document.querySelector('.vehicle-card').offsetWidth;
+                const gap = 20;
+                const scrollPos = vehicleContainer.scrollLeft;
+                const activeIndex = Math.round(scrollPos / (cardWidth + gap));
+                
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === activeIndex);
+                });
+            });
+
+            // Rent button functionality
+            document.querySelectorAll('.rent-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const vehicleType = this.parentElement.querySelector('h3').textContent;
+                    alert(`You selected to rent a ${vehicleType}. Redirecting to booking page...`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

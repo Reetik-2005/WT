@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickRent - Become a Host</title>
+  <style>
+    :root {
+      --primary: #2e31cc;
+      --secondary: #27ae60;
+      --dark: #2c3e50;
+      --light: #ecf0f1;
+      --accent: #3498db;
+      --warning: #e74c3c;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7fa;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/api/placeholder/1200/400');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 100px 0;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    
+    .hero p {
+      font-size: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .benefits {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .benefit-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 32%;
+      text-align: center;
+      margin-bottom: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .benefit-icon {
+      font-size: 48px;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    
+    .form-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .form-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: var(--dark);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+    }
+    
+    .form-row {
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .input-file-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      cursor: pointer;
+    }
+    
+    .file-input-label {
+      background-color: var(--light);
+      color: var(--dark);
+      padding: 12px 20px;
+      border-radius: 4px;
+      display: inline-block;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .file-input-label:hover {
+      background-color: #dadedf;
+    }
+    
+    .file-name {
+      margin-left: 10px;
+      font-style: italic;
+    }
+    
+    .submit-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      font-size: 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    
+    .submit-btn:hover {
+      background-color: var(--secondary);
+    }
+    
+    .features {
+      margin-bottom: 40px;
+    }
+    
+    .feature-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      align-items: center;
+    }
+    
+    .feature-cards {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    
+    .feature-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 32%;
+      text-align: center;
+      margin-bottom: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .feature-icon {
+      font-size: 48px;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    
+    .testimonials {
+      background-color: white;
+      padding: 40px 0;
+      margin-bottom: 40px;
+    }
+    
+    .testimonial-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .testimonial-cards {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    
+    .testimonial-card {
+      width: 30%;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: var(--light);
+      border-radius: 8px;
+      position: relative;
+    }
+    
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    
+    .testimonial-author {
+      font-weight: bold;
+    }
+    
+    .testimonial-location {
+      color: #777;
+    }
+    
+    .testimonial-rating {
+      color: #f1c40f;
+      margin-top: 10px;
+    }
+    
+    footer {
+      background-color: var(--dark);
+      color: white;
+      padding: 40px 0;
+      text-align: center;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+    }
+    
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+    
+    .social-icons {
+      margin-bottom: 20px;
+    }
+    
+    .social-icons a {
+      color: white;
+      margin: 0 10px;
+      font-size: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .benefit-card, .testimonial-card, .feature-card {
+        width: 100%;
+      }
+      
+      .feature-row {
+        flex-direction: column !important;
+      }
+      
+      .hero h1 {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <div class="logo">QuickRent</div>
+      <nav>
+        <a href="main.html" style="text-decoration: none; color: var(--dark); margin-left: 20px;">Home</a>
+        <a href="contact" style="text-decoration: none; color: var(--dark); margin-left: 20px;">Contact</a>
+      </nav>
+    </div>
+  </header>
+  
+  <section class="hero">
+    <div class="container">
+      <h1>Turn Your Vehicle Into Income</h1>
+      <p>Join thousands of successful hosts earning an average of ₹60,000 per month with QuickRent</p>
+    </div>
+  </section>
+  
+  <div class="container">
+    <section class="benefits">
+      <div class="benefit-card">
+        <div class="benefit-icon">💰</div>
+        <h3>Earn Extra Income</h3>
+        <p>Make up to ₹90,000 monthly renting your vehicle during times you don't need it</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🛡️</div>
+        <h3>₹75 Lakh Insurance Coverage</h3>
+        <p>Your vehicle is protected with our comprehensive insurance policy</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⚡</div>
+        <h3>Quick & Easy Process</h3>
+        <p>Start earning in as little as 24 hours after approval</p>
+      </div>
+    </section>
+    
+    <section class="form-container">
+      <h2 class="form-title">Become a Host Today</h2>
+      <form id="host-form" action="thank.html" method="POST">
+        <div class="form-row" style="display: flex; gap: 20px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="firstName">First Name*</label>
+            <input type="text" id="firstName" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="lastName">Last Name*</label>
+            <input type="text" id="lastName" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address*</label>
+          <input type="email" id="email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Phone Number*</label>
+          <input type="tel" id="phone" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="address">Full Address*</label>
+          <textarea id="address" placeholder="Enter your full address" required></textarea>
+        </div>
+        
+        <div class="form-row" style="display: flex; gap: 20px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="city">City*</label>
+            <input type="text" id="city" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="state">State*</label>
+            <select id="state" required>
+              <option value="">Select State</option>
+              <option value="AP">Andhra Pradesh</option>
+              <option value="AR">Arunachal Pradesh</option>
+              <option value="AS">Assam</option>
+              <option value="BR">Bihar</option>
+              <option value="CT">Chhattisgarh</option>
+              <!-- More states would be added here -->
+            </select>
+          </div>
+          <div class="form-group" style="flex: 0.5;">
+            <label for="zip">Pin Code*</label>
+            <input type="text" id="zip" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="vehicleType">Vehicle Type*</label>
+          <select id="vehicleType" required>
+            <option value="">Select Vehicle Type</option>
+            <option value="sedan">Sedan</option>
+            <option value="suv">SUV</option>
+            <option value="truck">Traveller</option>
+            <option value="van">Bus</option>
+            <option value="luxury">Luxury</option>
+            <option value="convertible">Bike</option>
+            <option value="electric">Electric</option>
+          </select>
+        </div>
+        
+        <div class="form-row" style="display: flex; gap: 20px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="make">Make*</label>
+            <input type="text" id="make" placeholder="e.g. Maruti, Tata" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="model">Model*</label>
+            <input type="text" id="model" placeholder="e.g. Swift, Nexon" required>
+          </div>
+          <div class="form-group" style="flex: 0.5;">
+            <label for="year">Year*</label>
+            <input type="number" id="year" min="2000" max="2025" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Upload Vehicle Photo*</label>
+          <div class="input-file-wrapper">
+            <label for="vehiclePhoto" class="file-input-label">Choose File</label>
+            <span class="file-name">No file chosen</span>
+            <input type="file" id="vehiclePhoto" style="display: none;" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Upload Vehicle Owner ID*</label>
+          <div class="input-file-wrapper">
+            <label for="ownerId" class="file-input-label">Choose File</label>
+            <span class="file-name">No file chosen</span>
+            <input type="file" id="ownerId" style="display: none;" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Upload Vehicle Registration Certificate*</label>
+          <div class="input-file-wrapper">
+            <label for="registration" class="file-input-label">Choose File</label>
+            <span class="file-name">No file chosen</span>
+            <input type="file" id="registration" style="display: none;" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="availability">Availability*</label>
+          <select id="availability" required>
+            <option value="">Select Availability</option>
+            <option value="weekdays">Weekdays Only</option>
+            <option value="weekends">Weekends Only</option>
+            <option value="full">Full Week</option>
+            <option value="custom">Custom Schedule</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <button type="submit" class="submit-btn">Submit Application</button>
+        </div>
+      </form>
+    </section>
+    
+    <section class="features">
+      <h2 style="text-align: center; margin-bottom: 30px;">Why Host With QuickRent?</h2>
+      
+      <div class="feature-cards">
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>Flexible Scheduling</h3>
+          <p>You decide when your vehicle is available. Use our easy calendar tool to block off dates when you need your car and make it available only when it works for you.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔑</div>
+          <h3>Contactless Key Exchange</h3>
+          <p>Our smart lockbox technology allows for seamless, contactless vehicle handoffs. No need to meet renters in person - everything is managed through our secure app.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🛎️</div>
+          <h3>24/7 Customer Support</h3>
+          <p>Our dedicated support team is available around the clock to assist with any questions or concerns you might have as a host.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="testimonial-title">What Our Hosts Are Saying</h2>
+      
+      <div class="testimonial-cards">
+        <div class="testimonial-card">
+          <div class="testimonial-text">"I was skeptical at first, but QuickRent has been amazing! My SUV sits idle during the week, and now it's earning me over ₹70,000 per month."</div>
+          <div class="testimonial-author">Mihir K.</div>
+          <div class="testimonial-location">Mumbai, MH</div>
+          <div class="testimonial-rating">★★★★★</div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-text">"The insurance coverage gave me peace of mind, and the earnings have helped me pay off my car loan faster than expected!"</div>
+          <div class="testimonial-author">Sanjana J.</div>
+          <div class="testimonial-location">Bangalore, KA</div>
+          <div class="testimonial-rating">★★★★★</div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-text">"The setup process was incredibly easy. Within 48 hours of applying, my vehicle was listed and I had my first booking."</div>
+          <div class="testimonial-author">Dhruv L.</div>
+          <div class="testimonial-location">Delhi, DL</div>
+          <div class="testimonial-rating">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <div class="container">
+    <section style="background-color: var(--primary); color: white; padding: 40px; border-radius: 8px; text-align: center; margin-bottom: 40px;">
+      <h2 style="margin-bottom: 20px;">Ready to start earning with your vehicle?</h2>
+      <p style="margin-bottom: 30px; font-size: 18px;">Join thousands of successful hosts on QuickRent today!</p>
+      <a href="#host-form" style="display: inline-block; background-color: white; color: var(--primary); text-decoration: none; padding: 14px 30px; border-radius: 4px; font-weight: bold; font-size: 18px;">Become a Host Now</a>
+    </section>
+  </div>
+  
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">About Us</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Host Resources</a>
+        <a href="#">Support</a>
+      </div>
+      
+      <div class="social-icons">
+        <a href="#">📱</a>
+        <a href="#">📘</a>
+        <a href="#">📸</a>
+        <a href="#">🐦</a>
+      </div>
+      
+      <p>&copy; 2025 QuickRent. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple script to show file names when files are selected
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+      input.addEventListener('change', function() {
+        const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+        this.previousElementSibling.textContent = fileName;
+      });
+    });
+  </script>
+</body>
+</html>

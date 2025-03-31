@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickRent - Premium Vehicle Rentals</title>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            --primary: #0b7dda;
+            --secondary: #0badf3;
+            --dark: #222;
+            --light: #f8f9fa;
+            --accent: #ff6b6b;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        #navbar {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px 5%;
+            display: flex; 
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        #navbar.scrolled {
+            padding: 10px 5%;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        /* Left section of navbar */
+        .nav-left {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Logo */
+        #logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        #logo:hover {
+            letter-spacing: 2px;
+        }
+
+        /* Hamburger Menu */
+        .menu-icon {
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: white;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-icon:hover {
+            transform: scale(1.1);
+            color: var(--secondary);
+        }
+
+        /* Profile Icon and Dropdown */
+        .profile-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            font-size: 1.5rem;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-text {
+            margin-left: 10px;
+            font-weight: 500;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-chevron {
+            margin-left: 8px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .profile-container:hover .profile-icon {
+            background-color: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .profile-container:hover .profile-text {
+            color: var(--secondary);
+        }
+
+        .profile-container:hover .profile-chevron {
+            color: var(--secondary);
+            transform: translateY(2px);
+        }
+
+        .dropdown-content {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background-color: rgba(0, 0, 0, 0.95);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 10px 0;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            transform: translateY(10px);
+        }
+
+        .dropdown-content.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-content a i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 8px 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 0;
+            height: 100%;
+            position: fixed;
+            background: rgba(0, 0, 0, 0.95);
+            padding-top: 80px;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-logo {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.active .sidebar-logo {
+            opacity: 1;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--secondary);
+            padding-left: 26px;
+        }
+
+        .sidebar.active {
+            width: 280px;
+        }
+
+        .sidebar.active a {
+            opacity: 1;
+            animation: fadeInRight 0.5s forwards;
+        }
+
+        .sidebar a:nth-child(1) { animation-delay: 0.1s; }
+        .sidebar a:nth-child(2) { animation-delay: 0.2s; }
+        .sidebar a:nth-child(3) { animation-delay: 0.3s; }
+        .sidebar a:nth-child(4) { animation-delay: 0.4s; }
+        .sidebar a:nth-child(5) { animation-delay: 0.5s; }
+        .sidebar a:nth-child(6) { animation-delay: 0.6s; }
+        .sidebar a:nth-child(7) { animation-delay: 0.7s; }
+
+        /* Main Content */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-left: 0;
+            padding: 20px 5%;
+            padding-top: 100px;
+            padding-bottom: 60px;
+        }
+
+        .main-container.expanded {
+            margin-left: 280px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 3rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #middle {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        /* Vehicle Rental Section */
+        .vehicles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .vehicle-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .vehicle-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .vehicle-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .vehicle-box h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin: 20px 0 15px;
+        }
+
+        .vehicle-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .vehicle-box:hover .vehicle-image {
+            transform: scale(1.03);
+        }
+
+        .vehicle-specs {
+            text-align: left;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        .vehicle-specs span {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .vehicle-specs span::before {
+            content: '•';
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .price {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 25px 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .rent-btn {
+            padding: 15px 30px;
+            font-size: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(11, 173, 243, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rent-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(11, 173, 243, 0.4);
+        }
+
+        .rent-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Footer Navigation */
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px 5%;
+            color: white;
+            transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 0;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        footer a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--secondary);
+        }
+
+        footer a:hover::after {
+            width: 100%;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icons a {
+            font-size: 1.4rem;
+            color: white;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        /* Social Media Colors */
+        .social-icons a i {
+            transition: color 0.3s ease;
+        }
+
+        .sc1:hover i { color: #30aae7; background: rgba(48, 170, 231, 0.1); }  /* X */
+        .sc2:hover i { color: #f0138c; background: rgba(240, 19, 140, 0.1); }  /* Instagram */
+        .sc3:hover i { color: #29ba35; background: rgba(41, 186, 53, 0.1); }  /* WhatsApp */
+        .sc4:hover i { color: #3b5998; background: rgba(59, 89, 152, 0.1); }  /* Facebook */
+
+        /* Animations */
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .vehicles {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            #navbar {
+                padding: 15px 5%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            #middle {
+                font-size: 1rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .social-icons {
+                margin-top: 15px;
+            }
+            
+            .main-container {
+                padding-top: 90px;
+            }
+            
+            .dropdown-content {
+                right: -50px;
+                width: 280px;
+            }
+            
+            .profile-text {
+                display: none;
+            }
+            
+            .profile-chevron {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .vehicle-box {
+                padding: 20px;
+            }
+            
+            .rent-btn {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Upper Navbar -->
+    <div id="navbar">
+        <div class="nav-left">
+            <span class="menu-icon" onclick="toggleSidebar()">☰</span>
+            <a id="logo" href="#">QuickRent</a>
+        </div>
+        <div class="profile-container" onclick="toggleDropdown()">
+            <div class="profile-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-text">Profile
+                <span class="profile-chevron"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div class="dropdown-content" id="profileDropdown">
+                <a href="#"><i class="fas fa-user-circle"></i> My Profile</a>
+                <a href="login.html"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="main.html"><i class="fas fa-home"></i> Home</a>
+        <a href="cycle.html"><i class="fas fa-bicycle"></i> Cycle</a>
+        <a href="bike.html"><i class="fas fa-motorcycle"></i> Bike/Scooty</a>
+        <a href="dividecar.html"><i class="fas fa-car"></i> Car</a>
+        <a href="bus.html"><i class="fas fa-bus"></i> Bus/Traveller</a>
+        <a href="becomeahost.html"><i class="fas fa-calendar-check"></i> Become a host</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container" id="main-content">
+        <div class="main-content">
+
+            <header class="animate__animated animate__fadeIn">
+                <h1>Find Your Perfect Ride</h1>
+                <p id="middle">Experience premium vehicle rentals at unbeatable prices with QuickRent's exceptional fleet</p>
+            </header>
+
+            <section class="vehicles" id="rent">
+                <div class="vehicle-box animate__animated animate__fadeInUp">
+                    <div class="vehicle-image" style="background-image: url('https://imgd.aeplcdn.com/1056x594/n/cw/ec/54337/maruti-suzuki-swift-exterior-right-front-three-quarter-2.jpeg?isig=0&q=75');"></div>
+                    <h2>Maruti Suzuki Swift</h2>
+                    <div class="vehicle-specs">
+                        <span>⏱️ 2023 Model</span>
+                        <span>🛣️ 15,000 km</span>
+                        <span>⛽ Petrol</span>
+                        <span>🧍 5 Seater</span>
+                    </div>
+                    <div class="price">₹1,499/day</div>
+                    <a href="rentprotocol.html"><button class="rent-btn">Rent Now</button></a>
+                </div>
+
+                <div class="vehicle-box animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="vehicle-image" style="background-image: url('https://imgd.aeplcdn.com/1056x594/n/cw/ec/110815/baleno-exterior-right-front-three-quarter-75.jpeg?isig=0&q=75');"></div>
+                    <h2>Maruti Suzuki Baleno</h2>
+                    <div class="vehicle-specs">
+                        <span>⏱️ 2022 Model</span>
+                        <span>🛣️ 12,500 km</span>
+                        <span>⛽ Petrol</span>
+                        <span>🧍 5 Seater</span>
+                    </div>
+                    <div class="price">₹1,799/day</div>
+                    <a href="rentprotocol.html"><button class="rent-btn">Rent Now</button></a>
+                </div>
+
+                <div class="vehicle-box animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="vehicle-image" style="background-image: url('https://imgd.aeplcdn.com/1056x594/n/cw/ec/40432/wagon-r-exterior-right-front-three-quarter-3.jpeg?isig=0&q=75');"></div>
+                    <h2>Maruti Wagon R</h2>
+                    <div class="vehicle-specs">
+                        <span>⏱️ 2021 Model</span>
+                        <span>🛣️ 18,000 km</span>
+                        <span>⛽ CNG</span>
+                        <span>🧍 5 Seater</span>
+                    </div>
+                    <div class="price">₹1,299/day</div>
+                    <a href="rentprotocol.html"><button class="rent-btn">Rent Now</button></a>
+                </div>
+                
+                <div class="vehicle-box animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="vehicle-image" style="background-image: url('https://imgd.aeplcdn.com/1056x594/n/cw/ec/141591/hyundai-exter-exterior-right-front-three-quarter-77.jpeg?isig=0&q=75');"></div>
+                    <h2>Hyundai Exter</h2>
+                    <div class="vehicle-specs">
+                        <span>⏱️ 2023 Model</span>
+                        <span>🛣️ 8,000 km</span>
+                        <span>⛽ Petrol</span>
+                        <span>🧍 5 Seater</span>
+                    </div>
+                    <div class="price">₹1,899/day</div>
+                    <a href="rentprotocol.html"><button class="rent-btn">Rent Now</button></a>
+                </div>
+
+                <div class="vehicle-box animate__animated animate__fadeInUp animate__delay-3s">
+                    <div class="vehicle-image" style="background-image: url('https://imgd.aeplcdn.com/1056x594/n/cw/ec/55403/tata-altroz-exterior-right-front-three-quarter-3.jpeg?isig=0&q=75');"></div>
+                    <h2>Tata Altroz</h2>
+                    <div class="vehicle-specs">
+                        <span>⏱️ 2022 Model</span>
+                        <span>🛣️ 10,500 km</span>
+                        <span>⛽ Diesel</span>
+                        <span>🧍 5 Seater</span>
+                    </div>
+                    <div class="price">₹1,699/day</div>
+                    <a href="rentprotocol.html"><button class="rent-btn">Rent Now</button></a>
+                </div>
+                
+                <div class="vehicle-box animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="vehicle-image" style="background-image: url('https://imgd.aeplcdn.com/1056x594/n/cw/ec/40409/ignis-exterior-right-front-three-quarter-3.jpeg?isig=0&q=75');"></div>
+                    <h2>Maruti Ignis</h2>
+                    <div class="vehicle-specs">
+                        <span>⏱️ 2021 Model</span>
+                        <span>🛣️ 22,000 km</span>
+                        <span>⛽ Petrol</span>
+                        <span>🧍 5 Seater</span>
+                    </div>
+                    <div class="price">₹1,399/day</div>
+                    <a href="rentprotocol.html"><button class="rent-btn">Rent Now</button></a>
+                </div>
+                
+                <div class="vehicle-box animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="vehicle-image" style="background-image: url('https://imgd.aeplcdn.com/1056x594/n/cw/ec/123591/tata-punch-exterior-right-front-three-quarter-2.jpeg?isig=0&q=75');"></div>
+                    <h2>Tata Punch</h2>
+                    <div class="vehicle-specs">
+                        <span>⏱️ 2023 Model</span>
+                        <span>🛣️ 7,500 km</span>
+                        <span>⛽ CNG</span>
+                        <span>🧍 5 Seater</span>
+                    </div>
+                    <div class="price">₹1,599/day</div>
+                    <a href="rentprotocol.html"><button class="rent-btn">Rent Now</button></a>
+                </div>
+
+                <div class="vehicle-box animate__animated animate__fadeInUp animate__delay-3s">
+                    <div class="vehicle-image" style="background-image: url('https://imgd.aeplcdn.com/1056x594/n/cw/ec/54361/maruti-suzuki-dzire-exterior-right-front-three-quarter-2.jpeg?isig=0&q=75');"></div>
+                    <h2>Maruti Dzire</h2>
+                    <div class="vehicle-specs">
+                        <span>⏱️ 2022 Model</span>
+                        <span>🛣️ 14,000 km</span>
+                        <span>⛽ Petrol</span>
+                        <span>🧍 5 Seater</span>
+                    </div>
+                    <div class="price">₹1,699/day</div>
+                    <a href="rentprotocol.html"><button class="rent-btn">Rent Now</button></a>
+                </div>
+                
+                <div class="vehicle-box animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="vehicle-image" style="background-image: url('https://imgd.aeplcdn.com/1056x594/n/cw/ec/123815/hyundai-i20-exterior-right-front-three-quarter-3.jpeg?isig=0&q=75');"></div>
+                    <h2>Hyundai i20</h2>
+                    <div class="vehicle-specs">
+                        <span>⏱️ 2021 Model</span>
+                        <span>🛣️ 16,000 km</span>
+                        <span>⛽ Diesel</span>
+                        <span>🧍 5 Seater</span>
+                    </div>
+                    <div class="price">₹1,899/day</div>
+                    <a href="rentprotocol.html"><button class="rent-btn">Rent Now</button></a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="aboutus.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms & Conditions</a>
+            </div>
+            <div class="social-icons">
+                <a href="#" class="sc1"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" class="sc2"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="sc3"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" class="sc4"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const content = document.getElementById("main-content");
+            
+            const navbar = document.getElementById("navbar");
+
+            sidebar.classList.toggle("active");
+            content.classList.toggle("expanded");
+            
+            if (sidebar.classList.contains("active")) {
+                footer.style.marginLeft = "280px";
+                navbar.style.marginLeft = "280px";
+            } else {
+                footer.style.marginLeft = "0";
+                navbar.style.marginLeft = "0";
+            }
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById("profileDropdown");
+            const chevron = document.querySelector('.profile-chevron i');
+            dropdown.classList.toggle("show");
+            
+            // Rotate chevron when dropdown is shown
+            if (dropdown.classList.contains("show")) {
+                chevron.style.transform = "rotate(180deg)";
+            } else {
+                chevron.style.transform = "rotate(0deg)";
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById("profileDropdown");
+            const profileContainer = document.querySelector('.profile-container');
+            const chevron = document.querySelector('.profile-chevron i');
+            
+            if (dropdown.classList.contains("show") && !profileContainer.contains(event.target)) {
+                dropdown.classList.remove("show");
+                chevron.style.transform = "rotate(0deg)";
+            }
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById("navbar");
+            if (window.scrollY > 50) {
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
+        });
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById("sidebar");
+            const menuIcon = document.querySelector('.menu-icon');
+            
+            if (sidebar.classList.contains("active") && 
+                !sidebar.contains(event.target) && 
+                event.target !== menuIcon) {
+                toggleSidebar();
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

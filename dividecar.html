@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickRent - Car Rental Categories</title>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            --primary: #0b7dda;
+            --secondary: #0badf3;
+            --dark: #222;
+            --light: #f8f9fa;
+            --accent: #ff6b6b;
+            --budget: #4CAF50;
+            --midrange: #2196F3;
+            --premium: #9C27B0;
+            --luxury: #F44336;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        #navbar {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px 5%;
+            display: flex; 
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        #navbar.scrolled {
+            padding: 10px 5%;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        /* Left section of navbar */
+        .nav-left {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Logo */
+        #logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        #logo:hover {
+            letter-spacing: 2px;
+        }
+
+        /* Hamburger Menu */
+        .menu-icon {
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: white;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-icon:hover {
+            transform: scale(1.1);
+            color: var(--secondary);
+        }
+
+        /* Profile Icon and Dropdown */
+        .profile-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            font-size: 1.5rem;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-text {
+            margin-left: 10px;
+            font-weight: 500;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-text:after {
+            content: '\f0d7'; /* Unicode for caret-down */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            margin-left: 8px;
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-container:hover .profile-icon {
+            background-color: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .profile-container:hover .profile-text {
+            color: var(--secondary);
+        }
+
+        .profile-container:hover .profile-text:after {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background-color: rgba(0, 0, 0, 0.95);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0 shimmering0,0,0,0.2);
+            border-radius: 10px;
+            padding: 10px 0;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            transform: translateY(10px);
+        }
+
+        .dropdown-content.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-content a i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 8px 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 0;
+            height: 100%;
+            position: fixed;
+            background: rgba(0, 0, 0, 0.95);
+            padding-top: 80px;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--secondary);
+            padding-left: 26px;
+        }
+
+        .sidebar.active {
+            width: 280px;
+        }
+
+        .sidebar.active a {
+            opacity: 1;
+            animation: fadeInRight 0.5s forwards;
+        }
+
+        .sidebar a:nth-child(1) { animation-delay: 0.1s; }
+        .sidebar a:nth-child(2) { animation-delay: 0.2s; }
+        .sidebar a:nth-child(3) { animation-delay: 0.3s; }
+        .sidebar a:nth-child(4) { animation-delay: 0.4s; }
+        .sidebar a:nth-child(5) { animation-delay: 0.5s; }
+        .sidebar a:nth-child(6) { animation-delay: 0.6s; }
+        .sidebar a:nth-child(7) { animation-delay: 0.7s; }
+        .sidebar a:nth-child(8) { animation-delay: 0.8s; }
+
+        /* Main Content */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-left: 0;
+            padding: 20px 5%;
+            padding-top: 100px;
+            padding-bottom: 60px;
+        }
+
+        .main-container.expanded {
+            margin-left: 280px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 3rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #middle {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        /* Car Categories Section */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .category-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px; /* Adjusted from 400px since less content */
+        }
+
+        .category-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+        }
+
+        .category-box:nth-child(1)::before {
+            background: linear-gradient(to right, var(--budget), #81C784);
+        }
+
+        .category-box:nth-child(2)::before {
+            background: linear-gradient(to right, var(--midrange), #64B5F6);
+        }
+
+        .category-box:nth-child(3)::before {
+            background: linear-gradient(to right, var(--premium), #BA68C8);
+        }
+
+        .category-box:nth-child(4)::before {
+            background: linear-gradient(to right, var(--luxury), #E57373);
+        }
+
+        .category-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .category-box:nth-child(1) .category-title i {
+            color: var(--budget);
+        }
+
+        .category-box:nth-child(2) .category-title i {
+            color: var(--midrange);
+        }
+
+        .category-box:nth-child(3) .category-title i {
+            color: var(--premium);
+        }
+
+        .category-box:nth-child(4) .category-title i {
+            color: var(--luxury);
+        }
+
+        .category-title i {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .category-box h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .category-content {
+            flex-grow: 1;
+        }
+
+        .price-range {
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .category-box:nth-child(1) .price-range {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--budget);
+        }
+
+        .category-box:nth-child(2) .price-range {
+            background-color: rgba(33, 150, 243, 0.1);
+            color: var(--midrange);
+        }
+
+        .category-box:nth-child(3) .price-range {
+            background-color: rgba(156, 39, 176, 0.1);
+            color: var(--premium);
+        }
+
+        .category-box:nth-child(4) .price-range {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--luxury);
+        }
+
+        .audience {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .audience h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .audience p {
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .view-btn {
+            padding: 15px 30px;
+            font-size: 1rem;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .category-box:nth-child(1) .view-btn {
+            background: linear-gradient(to right, var(--budget), #81C784);
+        }
+
+        .category-box:nth-child(2) .view-btn {
+            background: linear-gradient(to right, var(--midrange), #64B5F6);
+        }
+
+        .category-box:nth-child(3) .view-btn {
+            background: linear-gradient(to right, var(--premium), #BA68C8);
+        }
+
+        .category-box:nth-child(4) .view-btn {
+            background: linear-gradient(to right, var(--luxury), #E57373);
+        }
+
+        .view-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .view-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px 5%;
+            color: white;
+            transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 0;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        footer a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+
+        footer a:hover {
+            color: var(--secondary);
+        }
+
+        footer a:hover::after {
+            width: 100%;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icons a {
+            font-size: 1.4rem;
+            color: white;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        /* Social Media Colors */
+        .social-icons a i {
+            transition: color 0.3s ease;
+        }
+
+        .sc1:hover i { color: #30aae7; background: rgba(48, 170, 231, 0.1); }  /* X */
+        .sc2:hover i { color: #f0138c; background: rgba(240, 19, 140, 0.1); }  /* Instagram */
+        .sc3:hover i { color: #29ba35; background: rgba(41, 186, 53, 0.1); }  /* WhatsApp */
+        .sc4:hover i { color: #3b5998; background: rgba(59, 89, 152, 0.1); }  /* Facebook */
+
+        /* Animations */
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .categories {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            #navbar {
+                padding: 15px 5%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            #middle {
+                font-size: 1rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .social-icons {
+                margin-top: 15px;
+            }
+            
+            .main-container {
+                padding-top: 90px;
+            }
+            
+            .dropdown-content {
+                right: -50px;
+                width: 280px;
+            }
+            
+            .profile-text {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .category-box {
+                padding: 20px;
+            }
+            
+            .view-btn {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Upper Navbar -->
+    <div id="navbar">
+        <div class="nav-left">
+            <span class="menu-icon" onclick="toggleSidebar()">☰</span>
+            <a id="logo" href="#">QuickRent</a>
+        </div>
+        <div class="profile-container" onclick="toggleDropdown()">
+            <div class="profile-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-text">Profile
+                <span class="profile-chevron"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div class="dropdown-content" id="profileDropdown">
+                <a href="#"><i class="fas fa-user-circle"></i> My Profile</a>
+                <a href="login.html"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="main.html"><i class="fas fa-home"></i> Home</a>
+        <a href="cycle.html"><i class="fas fa-bicycle"></i> Cycle</a>
+        <a href="bike.html"><i class="fas fa-motorcycle"></i> Bike/Scooty</a>
+        <a href="dividecar.html"><i class="fas fa-car"></i> Car</a>
+        <a href="bus.html"><i class="fas fa-bus"></i> Bus/Traveller</a>
+        <a href="becomeahost.html"><i class="fas fa-calendar-check"></i> Become a host</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container" id="main-content">
+        <div class="main-content">
+
+            <header class="animate__animated animate__fadeIn">
+                <h1>Our Car Rental Categories</h1>
+                <p id="middle">Choose from our wide range of vehicles to suit every need and budget</p>
+            </header>
+
+            <section class="categories" id="categories">
+                <!-- Economy Cars -->
+                <div class="category-box animate__animated animate__fadeInUp">
+                    <div class="category-title">
+                        <i class="fas fa-wallet"></i>
+                        <h2>Economy Cars</h2>
+                    </div>
+                    <div class="category-content">
+                        <div class="price-range">₹500 – ₹2,000 per day</div>
+                        <div class="audience">
+                            <h3>Best For:</h3>
+                            <p>Daily commuting, budget travelers, city rides. High mileage, low maintenance.</p>
+                        </div>
+                    </div>
+                    <a href="economic.html"> <button class="view-btn">View Economy Cars</button></a>
+                </div>
+
+                <!-- Mid-Range Cars -->
+                <div class="category-box animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="category-title">
+                        <i class="fas fa-home"></i>
+                        <h2>Mid-Range Cars</h2>
+                    </div>
+                    <div class="category-content">
+                        <div class="price-range">₹2,000 – ₹6,000 per day</div>
+                        <div class="audience">
+                            <h3>Best For:</h3>
+                            <p>Family trips, business travel, long-distance journeys. More space, better comfort, decent luxury features.</p>
+                        </div>
+                    </div>
+                    <a href="midrange.html"><button class="view-btn">View Mid-Range Cars</button></a>
+                </div>
+
+                <!-- Luxury Cars -->
+                <div class="category-box animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="category-title">
+                        <i class="fas fa-gem"></i>
+                        <h2>Luxury Cars</h2>
+                    </div>
+                    <div class="category-content">
+                        <div class="price-range">₹6,000 – ₹30,000 per day</div>
+                        <div class="audience">
+                            <h3>Best For:</h3>
+                            <p>Business executives, high-profile events, special occasions. Leather seats, advanced infotainment, premium interiors.</p>
+                        </div>
+                    </div>
+                    <a href="luxury1.html"><button class="view-btn">View Luxury Cars</button></a>
+                </div>
+
+                <!-- Exotic & Supercars -->
+                <div class="category-box animate__animated animate__fadeInUp animate__delay-3s">
+                    <div class="category-title">
+                        <i class="fas fa-crown"></i>
+                        <h2>Exotic & Supercars</h2>
+                    </div>
+                    <div class="category-content">
+                        <div class="price-range">₹30,000 – ₹1 lakh+ per day</div>
+                        <div class="audience">
+                            <h3>Best For:</h3>
+                            <p>Weddings, luxury experiences, VIP clients, special events. High-performance engines, ultra-luxury interiors, brand prestige.</p>
+                        </div>
+                    </div>
+                    <a href="luxury2.html"><button class="view-btn">View Exotic Cars</button></a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="aboutus.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms & Conditions</a>
+            </div>
+            <div class="social-icons">
+                <a href="#" class="sc1"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" class="sc2"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="sc3"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" class="sc4"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle sidebar
+        function toggleSidebar(event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            
+            const sidebar = document.getElementById("sidebar");
+            const content = document.getElementById("main-content");
+            
+            sidebar.classList.toggle("active");
+            content.classList.toggle("expanded");
+            
+            if (sidebar.classList.contains("active")) {
+                footer.style.marginLeft = "280px";
+                navbar.style.marginLeft = "280px";
+            } else {
+                footer.style.marginLeft = "0";
+                navbar.style.marginLeft = "0";
+            }
+        }
+
+        // Toggle profile dropdown
+        function toggleProfileDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById("profileDropdown");
+            dropdown.classList.toggle("show");
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const profileDropdown = document.getElementById("profileDropdown");
+            const profileContainer = document.querySelector('.profile-container');
+            
+            if (profileDropdown.classList.contains("show") && 
+                !profileContainer.contains(event.target)) {
+                profileDropdown.classList.remove("show");
+            }
+            
+            const sidebar = document.getElementById("sidebar");
+            const menuIcon = document.querySelector('.menu-icon');
+            
+            if (sidebar.classList.contains("active") && 
+                !sidebar.contains(event.target) && 
+                event.target !== menuIcon) {
+                toggleSidebar();
+            }
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById("navbar");
+            if (window.scrollY > 50) {
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
